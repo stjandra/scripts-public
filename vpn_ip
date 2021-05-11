@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Print the vpn ip if connected to a vpn.
+# Otherwise print nothing.
+
+vpn_ip=$(ifconfig | grep -A1 '^tun' | sed -n '2 p' | sed -rn 's/.*inet\s*([^ ]*).*/\1/p')
+
+if [ -z "$vpn_ip" ]; then
+    exit 0
+fi
+
+echo -n "vpn:$vpn_ip   "

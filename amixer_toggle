@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Toggle mute and unmute.
+
+if amixer get Master | sed 5q | grep -q '\[on\]'; then
+    # On, so mute
+    amixer set Master toggle
+else
+    amixer set Master toggle
+    amixer set Speaker toggle
+    amixer set Headphone toggle
+fi
