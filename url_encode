@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# $1 - If stdin is not given, the string to encode.
+#
+# e.g.
+# echo http://blah.com | url_encode
+# url_encode https://blah.com
+
+set -euo pipefail
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+# shellcheck disable=SC1090
+source "$DIR/lib/helper.sh"
+
+# Python 3
+py="
+import urllib.parse
+import sys
+
+print(urllib.parse.quote_plus(sys.argv[1]))
+"
+
+python -c "$py" "$(read_input "${@}")"
