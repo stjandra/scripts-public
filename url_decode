@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# $1 - If stdin is not given, the string to decode.
+#
+# e.g.
+# echo https%3A%2F%2Fblah.com | url_decode
+# url_decode https%3A%2F%2Fblah.com
+
+set -euo pipefail
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+# shellcheck disable=SC1090
+source "$DIR/lib/helper.sh"
+
+# From https://stackoverflow.com/a/37840948
+urldecode() {
+    : "${*//+/ }"; echo -e "${_//%/\\x}";
+}
+
+urldecode "$(read_input "${@}")"
