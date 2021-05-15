@@ -22,4 +22,4 @@ import sys
 print(urllib.parse.quote_plus(sys.argv[1]))
 "
 
-python -c "$py" "$(read_input "${@}")"
+python3 -c "$py" "$(read_input "${@}")"
