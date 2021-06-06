@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# Pull all git repos in $GIT_DIR whose git url path matches $GIT_PATH.
+
+set -euo pipefail
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+# shellcheck disable=SC1090
+source "$DIR/lib/helper.sh"
+
+GIT_DIR="$HOME/git"
+
+GIT_PATH="stjandra"
+
+# TODO git bare
+# Get list of git repos.
+list_git_repos() {
+    find . -name ".git" | sed -rn "s|(.*)/.git|\1|p"
+}
+
+# Check if the git url path match the given name.
+# $1 The name to match.
+git_path_match() {
+    [[ $(git config --get remote.origin.url | sed -rn 's|.*:([^/]*)\/.*|\1|p') == "$1" ]]
+}
+
+cd "$GIT_DIR"
+
+for repo in $(list_git_repos); do
+
+    cd "$GIT_DIR/$repo"
+
+    if ! git_path_match $GIT_PATH; then
+        #output "Skipping $(pwd)"
+        continue
+    fi
+
+    output "Pulling $(pwd)"
+    git pull
+
+done

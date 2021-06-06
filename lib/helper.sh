@@ -18,3 +18,7 @@ read_input() {
 
     echo "$input"
 }
+
+output() {
+    echo "$@"
+}
