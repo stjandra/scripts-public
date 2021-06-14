@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Pull all git repos in $GIT_DIR whose git url path matches $GIT_PATH.
+# Pull all git repos in $GIT_DIR whose git remote url matches $GIT_REMOTE.
 
 set -euo pipefail
 
@@ -12,32 +12,27 @@ source "$DIR/lib/helper.sh"
 
 GIT_DIR="$HOME/git"
 
-GIT_PATH="stjandra"
+GIT_REMOTE="stjandra"
 
-# TODO git bare
-# Get list of git repos.
-list_git_repos() {
-    find . -name ".git" | sed -rn "s|(.*)/.git|\1|p"
-}
-
-# Check if the git url path match the given name.
+# Check if the git remote url matches the given name.
 # $1 The name to match.
-git_path_match() {
-    [[ $(git config --get remote.origin.url | sed -rn 's|.*:([^/]*)\/.*|\1|p') == "$1" ]]
+git_remote_match() {
+    git config --get remote.origin.url | grep -q "$1"
 }
 
 cd "$GIT_DIR"
 
-for repo in $(list_git_repos); do
+for repo in */ ; do
 
     cd "$GIT_DIR/$repo"
 
-    if ! git_path_match $GIT_PATH; then
+    if ! git_remote_match $GIT_REMOTE; then
         #output "Skipping $(pwd)"
         continue
     fi
 
     output "Pulling $(pwd)"
     git pull
+    output ""
 
 done
