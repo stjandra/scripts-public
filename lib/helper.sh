@@ -27,7 +27,7 @@ output() {
 source_if_exists() {
 
     if [ -f "$1" ]; then
-        output "Using constants file $1"
+        output "Sourcing file $1"
         # shellcheck disable=SC1090
         source "$1"
         return 0
