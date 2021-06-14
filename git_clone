@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Clone any missing git repo.
+
+set -euo pipefail
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+# shellcheck disable=SC1090
+source "$DIR/lib/helper.sh"
+
+GIT_DIR="$HOME/git"
+
+# Source the file containing the list of git repos $GIT_REPOS.
+source_if_exists "$HOME/git/scripts/constants.env" \
+    || source_if_exists "$DIR/constants.env" \
+    || (output "No constants file found, exiting." && exit 1)
+
+cd "$GIT_DIR"
+
+for git_repo in "${GIT_REPOS[@]}"; do
+
+    dir_name=$(echo "$git_repo" | sed -rn "s|.*/(.*).git|\1|p")
+
+    if [ -d "$dir_name" ]; then
+        output "Dir '$dir_name' exists. Skipping '$git_repo'."
+        continue
+    fi
+
+    output "Cloning $git_repo"
+    git clone "$git_repo"
+
+done

@@ -22,3 +22,16 @@ read_input() {
 output() {
     echo "$@"
 }
+
+# $1 The file to source.
+source_if_exists() {
+
+    if [ -f "$1" ]; then
+        output "Using constants file $1"
+        # shellcheck disable=SC1090
+        source "$1"
+        return 0
+    fi
+
+    return 1
+}
