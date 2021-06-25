@@ -1,0 +1,39 @@
+#+TITLE: scripts-public
+
+Some Bash scripts for convenience. Mostly used in my dotfiles or other scripts.
+
+* amixer_toggle
+
+Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/amixer][amixer]].
+
+* git_clone
+
+Loop through a set of git repos and clone them locally if missing on the local machine.
+
+* git_pull
+
+Pull git repos belonging to a particular user.
+
+* is_in_tmux
+
+Whether we are in a [[https://github.com/tmux/tmux/wiki][tmux]] session.
+
+* is_linux
+
+Whether we are in a Linux system.
+
+* is_macos
+
+Whether we are in a macOS system.
+
+* url_decode
+
+URL decode a string given via stdin or argument.
+
+* url_encode
+
+URL encode a string given via stdin or argument.
+
+* vpn_ip
+
+If connected to a vpn, get the ip.
