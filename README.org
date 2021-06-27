@@ -14,7 +14,7 @@ Loop through a set of git repos and clone them locally if missing on the local m
 
 Pull git repos belonging to a particular user.
 
-* is_in_tmux
+* in_tmux
 
 Whether we are in a [[https://github.com/tmux/tmux/wiki][tmux]] session.
 
