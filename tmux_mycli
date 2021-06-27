@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Run mycli with the given arguments.
+# If in tmux, rename the current tmux window to hostname/dbname.
+# The database name is assumed to be the last argument.
+# $@ - mycli arguments.
+#
+# e.g. tmux_mycli -u user -p dbname
+
+set -euo pipefail
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+# shellcheck disable=SC1090
+source "$DIR/lib/helper.sh"
+source "$DIR/lib/tmux_helper.sh"
+
+# ":"   - do not print "illegal option" message.
+# "h::" - h is optional.
+while getopts ':h::' flag; do
+    case "${flag}" in
+        h) DB_HOST="${OPTARG}" ;;
+        *) ;;
+    esac
+done
+
+# Set localhost if "-h" is not specified.
+DB_HOST=${DB_HOST:-'localhost'}
+
+# ${@: -1} - last argument.
+# Use last argument as tmux window title.
+run_cmd_tmux "$DB_HOST/${*: -1}" "mycli" "$@"
