@@ -26,6 +26,12 @@ Whether we are in a Linux system.
 
 Whether we are in a macOS system.
 
+* tmux_mycli
+Run [[https://github.com/dbcli/mycli][mycli]] (a MySQL terminal client) and rename the current tmux window to host and database name.
+
+* tmux_ssh
+Ssh and rename the current tmux window to the ssh destination.
+
 * url_decode
 
 URL decode a string given via stdin or argument.
