@@ -14,6 +14,7 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # Source helper script.
 # shellcheck disable=SC1090
 source "$DIR/lib/helper.sh"
+# shellcheck disable=SC1090
 source "$DIR/lib/tmux_helper.sh"
 
 # ":"   - do not print "illegal option" message.
@@ -26,8 +27,8 @@ while getopts ':h::' flag; do
 done
 
 # Set localhost if "-h" is not specified.
-DB_HOST=${DB_HOST:-'localhost'}
+[ -z "${DB_HOST-}" ] && LOCALHOST="localhost/"
 
 # ${@: -1} - last argument.
 # Use last argument as tmux window title.
-run_cmd_tmux "$DB_HOST/${*: -1}" "mycli" "$@"
+run_cmd_tmux "${LOCALHOST-}""${*: -1}" "mycli" "$@"
