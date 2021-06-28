@@ -6,6 +6,10 @@
 # $@ - ssh arguments.
 #
 # e.g. tmux_ssh user@host
+#
+# Note that complex command like the following does not work:
+# tmux_ssh -t user@$host 'cd somedir; bash -l'
+# Please see http://mywiki.wooledge.org/BashFAQ/050
 
 set -euo pipefail
 
@@ -14,28 +18,8 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # Source helper script.
 # shellcheck disable=SC1090
 source "$DIR/lib/helper.sh"
+# shellcheck disable=SC1090
 source "$DIR/lib/tmux_helper.sh"
 
-# Try to get the hostname from the given arguments.
-get_hostname() {
-
-    # Normally a command is specified like:
-    # tmux_ssh -t user@$host 'cd somedir; bash -l'
-
-    # ${@: -1} - last argument.
-    if echo "${@: -1}" | grep -qv "bash"; then
-        # Last argument has no "bash", should be the hostname.
-        echo "${@: -1}"
-    else
-        # Last argument has "bash", should be the 2nd to last argument.
-        # ${@:(-2):1} - 2nd last argument.
-        echo "${@:(-2):1}"
-    fi
-}
-
-MY_HOST="$(get_hostname "$@")"
-
-echo "host is $MY_HOST"
-
 # Use last argument as tmux window title.
-run_cmd_tmux "$MY_HOST" "ssh" "$@"
+run_cmd_tmux "${@: -1}" "ssh" "$@"
