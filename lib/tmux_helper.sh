@@ -4,7 +4,7 @@
 
 # Whether we are in a tmux session.
 is_in_tmux() {
-    [ -n "$TMUX" ]
+    [ -n "${TMUX-}" ]
 }
 
 # Rename tmux window to $@.
@@ -20,11 +20,12 @@ restore_tmux_window_name() {
 # Rename tmux window to $1 and evaluate ${@:2}.
 run_cmd_tmux() {
 
-    rename_tmux_window "$1"
+    # " || :" Don't exit if command fails.
+    rename_tmux_window "$1" || :
 
     # ${@:2} - all arguments except the 1st one.
     # shellcheck disable=SC3057
     eval "${@:2}"
 
-    restore_tmux_window_name
+    restore_tmux_window_name || :
 }
