@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Increase or decrease volume.
+# $1 - The volume. Could be a relative percentage like -5% or +5%
+
+set -euo pipefail
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+# shellcheck disable=SC1090
+source "$DIR/lib/pactl_helper.sh"
+
+SINK=$(get_running_sink)
+
+# https://wiki.archlinux.org/title/PulseAudio#Keyboard_volume_control
+pactl set-sink-mute "$SINK" false
+pactl set-sink-volume "$SINK" "$1"
