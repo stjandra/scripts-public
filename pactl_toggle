@@ -11,4 +11,10 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/lib/pactl_helper.sh"
 
 # https://wiki.archlinux.org/title/PulseAudio#Keyboard_volume_control
-pactl set-sink-mute "$(get_running_sink)" toggle
+pactl set-sink-mute "$(get_sink)" toggle
+
+if is_muted; then
+    notify_volume "0"
+else
+    notify_volume "$(get_volume)"
+fi
