@@ -3,7 +3,19 @@
 # Print the vpn ip if connected to a vpn.
 # Otherwise print nothing.
 
-vpn_ip=$(ifconfig | grep -A1 '^tun' | sed -n '2 p' | sed -rn 's/.*inet\s*([^ ]*).*/\1/p')
+get_ip() {
+    sed -rn 's/.*inet\s*([^ /]*).*/\1/p'
+}
+
+if command -v ifconfig &> /dev/null; then
+
+    vpn_ip=$(ifconfig | grep -A1 '^tun' | sed -n '2 p' | get_ip)
+
+elif command -v ip &> /dev/null; then
+
+    vpn_ip=$(ip addr | grep 'tun.$' | get_ip)
+
+fi
 
 if [ -z "$vpn_ip" ]; then
     exit 0
