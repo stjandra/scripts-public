@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+FILE=/etc/os-release
+[ -f $FILE ] && grep -Eiq "name.*arch" $FILE
