@@ -7,8 +7,8 @@ get_sink() {
     # Try to get the running sink
     SINK=$(pactl list sinks short | grep RUNNING | cut -d$'\t' -f1)
 
-    # Get the 1st sink if none is running
-    [ -z "$SINK" ] && SINK=$(pactl list sinks short | head -n1 | cut -d$'\t' -f1)
+    # Use hdmi if none is running
+    [ -z "$SINK" ] && SINK=$(pactl list sinks short | grep 'hdmi' | cut -d$'\t' -f1)
 
     echo "$SINK"
 }
