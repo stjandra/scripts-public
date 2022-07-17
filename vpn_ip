@@ -4,12 +4,19 @@
 # Otherwise print nothing.
 
 get_ip() {
-    sed -rn 's/.*inet\s*([^ /]*).*/\1/p'
+    sed -rn 's/.*inet\s([^ /]*).*/\1/p'
 }
 
 if command -v ifconfig &> /dev/null; then
 
-    vpn_ip=$(ifconfig | grep -A1 '^tun' | sed -n '2 p' | get_ip)
+    # Set interface
+    if is_linux; then
+        int="tun"
+    elif is_macos; then
+        int="utun"
+    fi
+
+    vpn_ip=$(ifconfig | grep -A1 "^$int" | tail -n1 | get_ip)
 
 elif command -v ip &> /dev/null; then
 

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Connect or disconnect TunnelBlick VPN on macOS.
+# $1 - connect or disconnect
+# $2 - configuration name
+#
+# e.g.,
+# vpn_tb connect client
+# vpn_tb disconnect client
+
+set -euo pipefail
+
+is_macos && osascript -e "tell application \"/Applications/Tunnelblick.app\"" -e "$1 \"$2\"" -e "end tell"

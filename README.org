@@ -43,3 +43,7 @@ URL encode a string given via stdin or argument.
 * vpn_ip
 
 If connected to a vpn, get the ip.
+
+* vpn_tb
+
+Connect or disconnect [[https://tunnelblick.net][TunnelBlick]] VPN on macOS.
