@@ -18,6 +18,10 @@ Pull git repos belonging to a particular user.
 
 Whether we are in a [[https://github.com/tmux/tmux/wiki][tmux]] session.
 
+* is_arch
+
+Whether we are in an Arch Linux system.
+
 * is_linux
 
 Whether we are in a Linux system.
@@ -25,6 +29,18 @@ Whether we are in a Linux system.
 * is_macos
 
 Whether we are in a macOS system.
+
+* lf_ueberzug
+
+Open the [[https://github.com/gokcehan/lf][lf]] file manager with [[https://github.com/seebye/ueberzug][Überzug]] for image preview.
+
+* pactl_toggle
+
+Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/pactl][pactl]].
+
+* pactl_volume
+
+Change sound volume with [[https://linux.die.net/man/1/pactl][pactl]].
 
 * tmux_mycli
 Run [[https://github.com/dbcli/mycli][mycli]] (a MySQL terminal client) and rename the current tmux window to host and database name.
