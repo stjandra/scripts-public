@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+# Create a new or switch to an existing tmux session with fzf.
+# $1 - A tab separated file containing the tmux session that we can create
+#
+# e.g. tmux_session tmux_session.csv
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+source "$DIR/lib/tmux_helper.sh"
+
+go_to_session() {
+
+    if is_in_tmux; then
+
+        tmux switch-client -t "$selected"
+
+    else
+        tmux attach -t "$selected"
+    fi
+}
+
+readarray -t sessions <<<"$(tmux list-sessions | cut -d: -f1)"
+
+declare -A new_cmd_arr
+
+read_file() {
+
+    while IFS=$'\t' read -r session_name new_cmd
+    do
+
+        # Skip if session exists
+        [[ " ${sessions[*]} " =~ ${session_name} ]] && continue
+
+        sessions+=("$session_name")
+
+        # Store new command if it is specified
+        [ -n "$new_cmd" ] && new_cmd_arr["$session_name"]="$new_cmd"
+
+    done < "$1"
+}
+
+[ -n "$1" ] && read_file "$1"
+
+# TODO exclude current session?
+
+selected=$(printf "%s\n" "${sessions[@]}" | fzf --reverse --header "Go to tmux session" --preview 'tmux capture-pane -pt {}')
+
+[ -z "$selected" ] && exit 1
+
+if tmux has-session -t "$selected" 2>/dev/null; then
+
+    go_to_session "$selected"
+
+elif [ -v "new_cmd_arr[$selected]" ]; then
+
+    eval "${new_cmd_arr[$selected]}"
+
+else
+
+    # Create detach session
+    tmux new-session -d -t "$selected"
+
+    go_to_session "$selected"
+fi

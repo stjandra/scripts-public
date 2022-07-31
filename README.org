@@ -43,7 +43,12 @@ Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/pactl][pactl]].
 Change sound volume with [[https://linux.die.net/man/1/pactl][pactl]].
 
 * tmux_mycli
+
 Run [[https://github.com/dbcli/mycli][mycli]] (a MySQL terminal client) and rename the current tmux window to host and database name.
+
+* tmux_session
+
+Create a new or switch to an existing tmux session with [[https://github.com/junegunn/fzf][fzf]].
 
 * tmux_ssh
 Ssh and rename the current tmux window to the ssh destination.
