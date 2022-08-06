@@ -21,7 +21,14 @@ go_to_session() {
     fi
 }
 
-readarray -t sessions <<<"$(tmux list-sessions | cut -d: -f1)"
+
+
+if out=$(tmux list-sessions); then
+    readarray -t sessions <<<"$(echo "$out" | cut -d: -f1)"
+else
+    # No existing tmux sessions. Declare empty array.
+    declare -a sessions
+fi
 
 declare -A new_cmd_arr
 
@@ -45,7 +52,7 @@ read_file() {
 
 # TODO exclude current session?
 
-selected=$(printf "%s\n" "${sessions[@]}" | fzf --reverse --header "Go to tmux session" --preview 'tmux capture-pane -pt {}')
+selected=$(printf "%s\n" "${sessions[@]}" | cat -n | fzf --reverse --header "Go to tmux session" --preview 'echo {} | sed "s/ *[0-9]*.//" | xargs tmux capture-pane -pt' | sed "s/ *[0-9]*.//")
 
 [ -z "$selected" ] && exit 1
 
@@ -59,7 +66,7 @@ elif [ -v "new_cmd_arr[$selected]" ]; then
 
 else
 
-    # Create detach session
+    # Create a detached session
     tmux new-session -d -t "$selected"
 
     go_to_session "$selected"
