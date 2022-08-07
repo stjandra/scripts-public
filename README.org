@@ -6,6 +6,10 @@ Some Bash scripts for convenience. Mostly used in my dotfiles or other scripts.
 
 Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/amixer][amixer]].
 
+* docker_macos
+
+A script to open Docker on macOS and block until Docker is initialized.
+
 * git_clone
 
 Loop through a set of git repos and clone them locally if missing on the local machine.

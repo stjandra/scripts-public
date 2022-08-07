@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# A script to open Docker on macOS
+# and block until Docker is initialized.
+
+set -euo pipefail
+
+is_macos || exit 1
+
+# Exit if it's already running
+docker ps && exit 0
+
+open -a Docker
+
+# Max time to wait
+end=$((SECONDS+30))
+
+while true; do
+
+    # Break once docker is initialized
+    docker ps && break
+
+    [ $SECONDS -gt $end ] && echo "Timeout" 1>&2 && exit 1
+
+    sleep 1
+
+done
