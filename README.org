@@ -42,6 +42,10 @@ Whether we are in a macOS system.
 
 Open the [[https://github.com/gokcehan/lf][lf]] file manager with [[https://github.com/seebye/ueberzug][Überzug]] for image preview.
 
+* mac_keystroke
+
+Simulate hitting a key on OS X.
+
 * pactl_toggle
 
 Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/pactl][pactl]].
