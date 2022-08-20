@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Copy to clipboard the value selected with fzf.
+# $1 - A tab separated file containing the values to copy
+#
+# e.g. copy_fzf copy.csv
+
+[[ $# = 1 ]] || exit 1
+
+declare -a names
+declare -A values
+
+read_file() {
+
+    while IFS=$'\t' read -r key val
+    do
+
+        names+=("$key")
+        values["$key"]="$val"
+
+    done < "$1"
+}
+
+read_file "$1"
+
+
+selected=$(printf "%s\n" "${names[@]}" | fzf --reverse --header "Copy")
+
+[ -z "$selected" ] && exit 1
+
+echo -n "${values[$selected]}" | pbcopy
