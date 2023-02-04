@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+is_linux && BINPATH=/usr/bin
+is_macos && BINPATH=/usr/local/bin
+
+# Run daemon from kitty in order to fix color issue
+# when client is opened in terminal
+
+#$BINPATH/alacritty -e $BINPATH/emacs --daemon=magit
+$BINPATH/kitty --single-instance $BINPATH/emacs --daemon=magit
+
+$BINPATH/kitty --single-instance $BINPATH/emacs --daemon=main
