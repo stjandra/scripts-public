@@ -2,9 +2,8 @@
 
 this_path=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-"$this_path"/is_macos && bin_path="/usr/local/bin"
-
-emacs_bin="$bin_path/emacs"
+emacs_bin="emacs"
+"$this_path"/is_macos && emacs_bin="/usr/local/bin/emacs"
 
 "$emacs_bin" --daemon=magit
 "$emacs_bin" --daemon=main
