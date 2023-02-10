@@ -6,17 +6,28 @@ Some Bash scripts for convenience. Mostly used in my dotfiles or other scripts.
 
 Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/amixer][amixer]].
 
+* change_theme
+
+Change the following theme:
+- [[https://github.com/kovidgoyal/kitty][kitty]]
+- [[https://github.com/neovim/neovim][nvim]]
+- [[https://github.com/tmux/tmux][tmux]]
+
+* change_theme_tmux
+
+Change [[https://github.com/tmux/tmux][tmux]] theme.
+
 * copy_fzf
 
-Copy to clipboard strings that are regularly used.
+Copy to clipboard strings that are regularly used with [[https://github.com/junegunn/fzf][fzf]].
 
 * docker_macos
 
-A script to open Docker on macOS and block until Docker is initialized.
+A script to open [[https://www.docker.com][Docker]] on macOS and block until Docker is initialized.
 
 * git_clone
 
-Loop through a set of git repos and clone them locally if missing on the local machine.
+Loop through a set of git repos and clone them locally if missing.
 
 * git_pull
 
@@ -24,7 +35,7 @@ Pull git repos belonging to a particular user.
 
 * in_tmux
 
-Whether we are in a [[https://github.com/tmux/tmux/wiki][tmux]] session.
+Whether we are in a [[https://github.com/tmux/tmux][tmux]] session.
 
 * is_arch
 
@@ -46,6 +57,12 @@ Open the [[https://github.com/gokcehan/lf][lf]] file manager with [[https://gith
 
 Simulate hitting a key on OS X.
 
+* mac_start
+
+A script that is executed once during macOS login.
+- Starts Emacs daemon.
+- Add keys to the ssh agent with password from the keychain.
+
 * pactl_toggle
 
 Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/pactl][pactl]].
@@ -53,6 +70,10 @@ Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/pactl][pactl]].
 * pactl_volume
 
 Change sound volume with [[https://linux.die.net/man/1/pactl][pactl]].
+
+* start_emacs
+
+Start [[https://www.gnu.org/software/emacs/][Emacs]] daemon.
 
 * tmux_mycli
 
@@ -63,7 +84,8 @@ Run [[https://github.com/dbcli/mycli][mycli]] (a MySQL terminal client) and rena
 Create a new or switch to an existing tmux session with [[https://github.com/junegunn/fzf][fzf]].
 
 * tmux_ssh
-Ssh and rename the current tmux window to the ssh destination.
+
+Ssh and rename the current [[https://github.com/tmux/tmux][tmux]] window to the ssh destination.
 
 * url_decode
 

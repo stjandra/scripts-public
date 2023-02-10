@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# Change kitty, nvim, tmux themes.
+# $1 - theme
+# Supported themes are
+# latte
+# macchiato
+# nord
+# onedark
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+source "$DIR/lib/helper.sh"
+
+if [ -z "$1" ]; then
+    echoerr "Missing argument"
+    exit 1
+fi
+
+catpuccins=("latte" "frappe" "macchiato" "mocha")
+config_dir="$HOME/.config"
+theme="$1"
+
+change_line() {
+    sed -i "s|$1|$2|g" "$3" || echo "Cannot modify $3"
+}
+
+change_theme_kitty() {
+
+    change_line "include ./themes/.*" "include ./themes/$theme.conf" "$config_dir"/kitty/kitty-all.conf
+
+    # Send kitty the SIGUSR1 to reload the config file
+    # https://sw.kovidgoyal.net/kitty/conf/
+    kill -SIGUSR1 $(pgrep kitty)
+}
+
+change_theme_nvim() {
+
+    nvim_theme="$theme"
+
+    # e.g., latte -> catpuccin-latte
+    [[ " ${catpuccins[@]} " =~ " ${theme} " ]] && nvim_theme="catppuccin-$theme"
+
+    change_line "local colorscheme = .*" "local colorscheme = \"$nvim_theme\"" "$config_dir"/nvim/lua/user/colorscheme.lua
+}
+
+change_theme_kitty
+
+change_theme_nvim
+
+change_theme_tmux "$theme"

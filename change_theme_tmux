@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+# Change tmux theme.
+# $1 - theme
+# Supported themes are
+# latte
+# macchiato
+# nord
+# onedark
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+source "$DIR/lib/helper.sh"
+
+if [ -z "$1" ]; then
+    echoerr "Missing argument"
+    exit 1
+fi
+
+set() {
+    local option=$1
+    local value=$2
+    tmux set-option -gq "$option" "$value"
+}
+
+setw() {
+    local option=$1
+    local value=$2
+    tmux set-window-option -gq "$option" "$value"
+}
+
+set_theme() {
+    local status_fg=$1
+    local status_left_bg=$2
+    local status_right_bg=$3
+    local window_current_fg=$4
+    local window_current_bg=$5
+    local pane_active_border_fg=$6
+    set status-left-style "fg=$status_fg,bg=$status_left_bg"
+    set status-right-style "fg=$status_fg,bg=$status_right_bg"
+    setw window-status-current-style "fg=$window_current_fg,bg=$window_current_bg"
+    set pane-active-border-style "fg=$pane_active_border_fg"
+}
+
+set_theme_latte() {
+    # Colors from https://github.com/catppuccin/catppuccin
+    local crust="#dce0e8"
+    local blue="#1e66f5"
+    local flamingo="#dd7878"
+    local lavender="#7287fd"
+    local maroon="#e64553"
+    set_theme "$crust" "$lavender" "$flamingo" "$crust" "$maroon" "$blue"
+}
+
+set_theme_macchiato() {
+    # Colors from https://github.com/catppuccin/catppuccin
+    local base="#24273a"
+    local blue="#8aadf4"
+    local flamingo="#f0c6c6"
+    local lavender="#b7bdf8"
+    local maroon="#ee99a0"
+    set_theme "$base" "$lavender" "$flamingo" "$base" "$maroon" "$blue"
+}
+
+set_theme_nord() {
+    # Colors from https://www.nordtheme.com
+    set_theme "#2e3440" "#81a1c1" "#88c0d0" "#2e3440" "#88c0d0" "#88c0d0"
+}
+
+set_theme_onedark() {
+    # Colors from https://github.com/Binaryify/OneDark-Pro
+    local bg="#282c34"
+    local fg="#abb2bf"
+    local color0="#3f4451"
+    local color2="#8cc265"
+    set_theme "$bg" "$color2" "$color2" "$fg" "$color0" "$color2"
+}
+
+theme="$1"
+func=set_theme_"$theme"
+
+if ! [[ $(type -t "$func") == function ]]; then
+    echoerr "Invalid theme $theme"
+    exit 1
+fi
+
+"$func"

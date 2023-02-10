@@ -23,6 +23,10 @@ output() {
     echo "$@"
 }
 
+echoerr() {
+    echo "$@" 1>&2;
+}
+
 # $1 The file to source.
 source_if_exists() {
 
