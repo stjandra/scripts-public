@@ -31,58 +31,95 @@ setw() {
 }
 
 set_theme() {
-    local status_fg=$1
-    local status_left_bg=$2
-    local status_right_bg=$3
-    local window_current_fg=$4
-    local window_current_bg=$5
-    local pane_active_border_fg=$6
-    set status-left-style "fg=$status_fg,bg=$status_left_bg"
-    set status-right-style "fg=$status_fg,bg=$status_right_bg"
-    setw window-status-current-style "fg=$window_current_fg,bg=$window_current_bg"
-    set pane-active-border-style "fg=$pane_active_border_fg"
+
+    set status-style "bg=$status_bg,fg=$status_fg"
+    set status-left-style "bg=$status_left_bg,fg=$status_left_fg"
+    set status-right-style "bg=$status_right_bg,fg=$status_right_fg"
+
+    setw window-status-style "bg=$window_bg,fg=$window_fg"
+    setw window-status-current-style "bg=$window_current_bg,fg=$window_current_fg"
+
+    set pane-border-style "bg=$pane_border_bg,fg=$pane_border_fg"
+    set pane-active-border-style "bg=$pane_active_border_bg,fg=$pane_active_border_fg"
+
+
 }
 
-set_theme_latte() {
+set_var_latte() {
     # Colors from https://github.com/catppuccin/catppuccin
-    local crust="#dce0e8"
-    local blue="#1e66f5"
-    local flamingo="#dd7878"
-    local lavender="#7287fd"
-    local maroon="#e64553"
-    set_theme "$crust" "$lavender" "$flamingo" "$crust" "$maroon" "$blue"
+    status_left_bg="#7287fd"
+    status_left_fg="#dce0e8"
+    status_right_bg="#dd7878"
+    status_right_fg="#dce0e8"
+    window_current_bg="#e64553"
+    window_current_fg="#dce0e8"
+    pane_border_fg="#6c6f85"
+    pane_active_border_fg="#1e66f5"
 }
 
-set_theme_macchiato() {
+set_var_macchiato() {
     # Colors from https://github.com/catppuccin/catppuccin
-    local base="#24273a"
-    local blue="#8aadf4"
-    local flamingo="#f0c6c6"
-    local lavender="#b7bdf8"
-    local maroon="#ee99a0"
-    set_theme "$base" "$lavender" "$flamingo" "$base" "$maroon" "$blue"
+    status_left_bg="#b7bdf8"
+    status_left_fg="#24273a"
+    status_right_bg="#f0c6c6"
+    status_right_fg="#24273a"
+    window_current_fg="#24273a"
+    window_current_bg="#ee99a0"
+    pane_border_fg="#5b6078"
+    pane_active_border_fg="#8aadf4"
 }
 
-set_theme_nord() {
+set_var_nord() {
     # Colors from https://www.nordtheme.com
-    set_theme "#2e3440" "#81a1c1" "#88c0d0" "#2e3440" "#88c0d0" "#88c0d0"
+    status_left_bg="#81a1c1"
+    status_left_fg="#2e3440"
+    status_right_bg="#88c0d0"
+    status_right_fg="#2e3440"
+    window_current_bg="#88c0d0"
+    window_current_fg="#2e3440"
+    pane_border_fg="#4c566a"
+    pane_active_border_fg="#88c0d0"
 }
 
-set_theme_onedark() {
+set_var_onedark() {
     # Colors from https://github.com/Binaryify/OneDark-Pro
-    local bg="#282c34"
-    local fg="#abb2bf"
-    local color0="#3f4451"
-    local color2="#8cc265"
-    set_theme "$bg" "$color2" "$color2" "$fg" "$color0" "$color2"
+    status_fg="#282c34"
+    status_bg="#8cc265"
+}
+
+change_line() {
+    grep -q "$2" "$3" && return
+    sed -i "s|$1|$2|g" "$3" || echo "Cannot modify $3"
 }
 
 theme="$1"
-func=set_theme_"$theme"
+func=set_var_"$theme"
 
 if ! [[ $(type -t "$func") == function ]]; then
     echoerr "Invalid theme $theme"
     exit 1
 fi
 
+def="default"
+
+status_bg="$def"
+status_fg="$def"
+status_left_bg="$def"
+status_left_fg="$def"
+status_right_bg="$def"
+status_right_fg="$def"
+
+window_bg="$def"
+window_fg="$def"
+window_current_bg="$def"
+window_current_fg="$def"
+
+pane_border_bg="$def"
+pane_border_fg="$def"
+pane_active_border_bg="$def"
+pane_active_border_fg="$def"
+
 "$func"
+set_theme
+
+change_line "run \"change_theme_tmux .*\"" "run \"change_theme_tmux $theme\"" "$HOME/.tmux.conf"

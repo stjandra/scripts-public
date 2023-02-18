@@ -23,6 +23,7 @@ config_dir="$HOME/.config"
 theme="$1"
 
 change_line() {
+    grep -q "$2" "$3" && return
     sed -i "s|$1|$2|g" "$3" || echo "Cannot modify $3"
 }
 
