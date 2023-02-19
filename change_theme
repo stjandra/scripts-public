@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Change kitty, nvim, tmux themes.
+# Change kitty, nvim, tmux, XMonad, Xmobar themes.
+# This script supports hot reload except for nvim.
 # $1 - theme
 # Supported themes are
 # latte
@@ -45,6 +46,38 @@ change_theme_nvim() {
 
     change_line "local colorscheme = .*" "local colorscheme = \"$nvim_theme\"" "$config_dir"/nvim/lua/user/colorscheme.lua
 }
+
+change_theme_xmobar() {
+
+    if ! is_linux; then
+        return 1
+    fi
+
+    xmobardir="$config_dir/xmobar"
+    xmobarhs="$xmobardir/xmobar.hs"
+
+    change_line "myTheme = .*Theme" "myTheme = ${theme}Theme" "$xmobarhs"
+
+    # recompile Xmobar
+    pushd "$xmobardir" || return 1
+    stack ghc -- --make -o "$HOME/.local/bin/xmobar" "$xmobarhs"
+    popd || return 1
+}
+
+change_theme_xmonad() {
+
+    if ! is_linux; then
+        return 1
+    fi
+
+    change_line "myTheme = .*Theme" "myTheme = ${theme}Theme" "$config_dir/xmonad/xmonad.hs"
+
+    xmonad --restart
+}
+
+# Xmobar must be changed before XMonad
+change_theme_xmobar
+change_theme_xmonad
 
 change_theme_kitty
 

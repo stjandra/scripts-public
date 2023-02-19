@@ -47,26 +47,26 @@ set_theme() {
 
 set_var_latte() {
     # Colors from https://github.com/catppuccin/catppuccin
-    status_left_bg="#7287fd"
+    status_left_bg="#1e66f5"
     status_left_fg="#dce0e8"
     status_right_bg="#dd7878"
     status_right_fg="#dce0e8"
     window_current_bg="#e64553"
     window_current_fg="#dce0e8"
     pane_border_fg="#6c6f85"
-    pane_active_border_fg="#1e66f5"
+    pane_active_border_fg="#7287fd"
 }
 
 set_var_macchiato() {
     # Colors from https://github.com/catppuccin/catppuccin
-    status_left_bg="#b7bdf8"
+    status_left_bg="#c6a0f6"
     status_left_fg="#24273a"
     status_right_bg="#f0c6c6"
     status_right_fg="#24273a"
     window_current_fg="#24273a"
     window_current_bg="#ee99a0"
     pane_border_fg="#5b6078"
-    pane_active_border_fg="#8aadf4"
+    pane_active_border_fg="#b7bdf8"
 }
 
 set_var_nord() {
@@ -85,6 +85,8 @@ set_var_onedark() {
     # Colors from https://github.com/Binaryify/OneDark-Pro
     status_fg="#282c34"
     status_bg="#8cc265"
+    pane_border_fg="#4f5666"
+    pane_active_border_fg="#8cc265"
 }
 
 change_line() {
