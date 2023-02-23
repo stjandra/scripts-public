@@ -28,6 +28,30 @@ change_line() {
     sed -i "s|$1|$2|g" "$3" || echo "Cannot modify $3"
 }
 
+change_theme_dunst() {
+
+    if ! is_linux; then
+        return 1
+    fi
+
+    rc="$config_dir/dunst/dunstrc"
+
+    # Check whether chosen theme is already in use
+    grep -q "^# Theme $theme" "$rc" && return
+
+    # Comment current theme block
+    # Starts with e.g., "# Theme macchiato {{{"
+    # Ends with "# }}}"
+    sed -i '/^# Theme .*/,/^# }}}/ s/^/#/' "$rc"
+
+    # Uncomment the chosen theme
+    # Starts with e.g., "## Theme nord {{{"
+    # Ends with "## }}}"
+    sed -i  "/## Theme $theme .*/,/## }}}/ s/^#//g" "$rc"
+
+    killall dunst
+}
+
 change_theme_kitty() {
 
     change_line "include ./themes/.*" "include ./themes/$theme.conf" "$config_dir"/kitty/kitty-all.conf
@@ -45,6 +69,22 @@ change_theme_nvim() {
     [[ " ${catpuccins[@]} " =~ " ${theme} " ]] && nvim_theme="catppuccin-$theme"
 
     change_line "local colorscheme = .*" "local colorscheme = \"$nvim_theme\"" "$config_dir"/nvim/lua/user/colorscheme.lua
+}
+
+change_theme_wallpaper() {
+
+    if ! is_linux; then
+        return 1
+    fi
+
+    # Check whether chosen theme is already in use
+    grep -q "$theme" "$HOME/.fehbg" && return
+
+    wallpaper="$config_dir/my-wallpaper/$theme.png"
+
+    [ ! -e "$wallpaper" ] && return 1
+
+    feh --bg-scale "$wallpaper"
 }
 
 change_theme_xmobar() {
@@ -79,8 +119,12 @@ change_theme_xmonad() {
 change_theme_xmobar
 change_theme_xmonad
 
+change_theme_dunst
+
 change_theme_kitty
 
 change_theme_nvim
 
 change_theme_tmux "$theme"
+
+change_theme_wallpaper
