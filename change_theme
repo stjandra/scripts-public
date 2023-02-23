@@ -1,8 +1,24 @@
 #!/usr/bin/env bash
 
-# Change kitty, nvim, tmux, XMonad, Xmobar themes.
-# This script supports hot reload except for nvim.
+# Change the following themes:
+# dunst
+# kitty
+# nvim
+# tmux
+# wallpaper
+# XMonad
+# Xmobar
+# X resources
+# zathura
+#
+# This script supports hot reload except for
+# dunst
+# nvim
+# X resources
+# zathura
+#
 # $1 - theme
+#
 # Supported themes are
 # latte
 # macchiato
@@ -115,6 +131,30 @@ change_theme_xmonad() {
     xmonad --restart
 }
 
+change_theme_xresources() {
+
+    if ! is_linux; then
+        return 1
+    fi
+
+    file="$HOME/.Xresources"
+
+    change_line "#include \".Xresources.d/theme-.*" "#include \".Xresources.d/theme-$theme\"" "$file"
+
+    xrdb "$file"
+}
+
+change_theme_zathura() {
+
+    if ! is_linux; then
+        return 1
+    fi
+
+    file="$config_dir/zathura/zathurarc"
+
+    change_line "include theme-.*" "include theme-$theme" "$file"
+}
+
 # Xmobar must be changed before XMonad
 change_theme_xmobar
 change_theme_xmonad
@@ -128,3 +168,7 @@ change_theme_nvim
 change_theme_tmux "$theme"
 
 change_theme_wallpaper
+
+change_theme_xresources
+
+change_theme_zathura
