@@ -11,18 +11,19 @@
 # X resources
 # zathura
 #
-# This script supports hot reload except for
-# dunst
-# nvim
-# X resources
-# zathura
+# The following supports hot reload:
+# kitty
+# tmux
+# wallpaper
+# XMonad
+# Xmobar
 #
 # $1 - theme
 #
 # Supported themes are
-# latte
-# macchiato
-# nord
+# latte (https://github.com/catppuccin/catppuccin)
+# macchiato (https://github.com/catppuccin/catppuccin)
+# nord (https://www.nordtheme.com)
 # onedark
 
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -66,6 +67,10 @@ change_theme_dunst() {
     sed -i  "/## Theme $theme .*/,/## }}}/ s/^#//g" "$rc"
 
     killall dunst
+}
+
+change_theme_fzf() {
+    change_line "my_export MYTHEME \".*" "my_export MYTHEME \"$theme\"" "$config_dir"/my-shell/export.sh
 }
 
 change_theme_kitty() {
@@ -160,6 +165,8 @@ change_theme_xmobar
 change_theme_xmonad
 
 change_theme_dunst
+
+change_theme_fzf
 
 change_theme_kitty
 
