@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Prints the current datetime, e.g., "2023-03-05 20:04"
+
+# https://stackoverflow.com/a/1401495
+printf '%(%Y-%m-%d %H:%M)T\n' -1

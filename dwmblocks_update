@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Signal a block to update
+# $1 - The dwmblocks signal to update
+
+pkill "-RTMIN+$1" dwmblocks

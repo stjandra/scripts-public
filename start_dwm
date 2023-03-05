@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+dwmblocks_my &
+
+# adapted from
+# https://www.reddit.com/r/suckless/comments/fqmtoy/comment/flr8xm8/?utm_source=share&utm_medium=web2x&context=3
+# if dwm exits 0, restart -- this allows hot reloading of config.h
+while type dwm >/dev/null; do
+    dwm || break
+done

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Run dwmblocks and signal the datetime block (signal 10)
+# to update at the start of every minute.
+
+update_time() {
+    dwmblocks_update 10
+}
+
+time_loop() {
+
+    while true
+    do
+
+        # Sleep until start of every minute
+        # https://unix.stackexchange.com/a/351853
+        sleep "$((60 - "$(date +%s)" % 60))";
+
+        update_time
+    done
+}
+
+dwmblocks &
+
+time_loop

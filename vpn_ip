@@ -28,4 +28,4 @@ if [ -z "$vpn_ip" ]; then
     exit 0
 fi
 
-echo -n "vpn:$vpn_ip   "
+echo -n "vpn:$vpn_ip"
