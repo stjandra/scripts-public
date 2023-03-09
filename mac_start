@@ -4,8 +4,9 @@
 # For more information how this script is executed:
 # https://stackoverflow.com/a/13372744
 
-# Run daemon from kitty in order to fix color issue
-# when client is opened in terminal
-/usr/local/bin/kitty --single-instance start_emacs
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+"$DIR"/start_emacs
 
 ssh-add --apple-load-keychain
