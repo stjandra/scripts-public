@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 
+daemon_running() {
+    pgrep -f "emacs.*--daemon=$1" >/dev/null 2>&1
+}
+
 this_path=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 emacs_bin="emacs"
 "$this_path"/is_macos && emacs_bin="/usr/local/bin/emacs"
 
-"$emacs_bin" --daemon=magit
-"$emacs_bin" --daemon=main
+# https://www.gnu.org/software/emacs/manual/html_node/efaq/Colors-on-a-TTY.html
+# For proper color when running emacsclient in terminal
+export COLORTERM=truecolor
+
+daemon_running magit || "$emacs_bin" --daemon=magit
+daemon_running main || "$emacs_bin" --daemon=main
