@@ -1,5 +1,0 @@
-main
-ssh
-sql
-custom-session	tmuxp load ~/path/to/tmuxp/workspace1
-another-custom-session	tmuxp load ~/path/to/tmuxp/workspace2

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Examples of bash functions that create a detached tmux session
+
+bla() {
+    tmux new-session -d -t bla
+}
+
+scripts() {
+
+    local group_name="scripts-public"
+    local wd="$HOME/git/scripts-public"
+
+    tmux new-session -d -t "$group_name" -c "$wd"
+
+    # Open nvim in first window
+    tmux rename-window -t "$group_name":1 "nvim"
+    tmux send-keys -t "$group_name":1 "nvim" Enter
+
+    # Open lazygit in second window
+    tmux new-window -d -c "$wd" -n git -t "$group_name"
+    tmux send-keys -t "$group_name":2 "lazygit" Enter
+}

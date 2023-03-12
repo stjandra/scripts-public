@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Create a new or switch to an existing tmux session with fzf.
-# $1 - A tab separated file containing the tmux session that we can create
+# $1 - A script containing bash functions that craete a detached tmux session.
 #
-# e.g. tmux_session tmux_session.csv
+# e.g. tmux_session $HOME/git/scripts-public/tmux_session_functions
 
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
@@ -11,63 +11,72 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/lib/tmux_helper.sh"
 
 go_to_session() {
-
     if is_in_tmux; then
-
         tmux switch-client -t "$selected"
-
     else
         tmux attach -t "$selected"
     fi
 }
 
-
-
 if out=$(tmux list-sessions); then
-    readarray -t sessions <<<"$(echo "$out" | cut -d: -f1)"
+    readarray -t sessions <<< "$(echo "$out" | cut -d: -f1)"
 else
     # No existing tmux sessions. Declare empty array.
     declare -a sessions
 fi
 
-declare -A new_cmd_arr
+session_exists() {
+
+    for session in "${sessions[@]}"
+    do
+        # $session has "-[0-9]+" suffix, e.g., "bla-0"
+        [[ "$session" =~ ^$1-[0-9]+$ ]] && return 0
+    done
+
+    return 1
+}
 
 read_file() {
 
-    while IFS=$'\t' read -r session_name new_cmd
+    readarray -t function_array <<< "$(grep -E ".*() {" "$1" | cut -d'(' -f1)"
+
+    # Add to $sessions array if it does not already exists
+    for function in "${function_array[@]}"
     do
+        session_exists "$function" && continue
+        sessions+=("$function")
+    done
 
-        # Skip if session exists
-        [[ " ${sessions[*]} " =~ ${session_name} ]] && continue
-
-        sessions+=("$session_name")
-
-        # Store new command if it is specified
-        [ -n "$new_cmd" ] && new_cmd_arr["$session_name"]="$new_cmd"
-
-    done < "$1"
+    source "$1"
 }
 
 [ -n "$1" ] && read_file "$1"
 
-# TODO exclude current session?
-
-selected=$(printf "%s\n" "${sessions[@]}" | cat -n | fzf --reverse --header "Go to tmux session" --preview 'echo {} | sed "s/ *[0-9]*.//" | xargs tmux capture-pane -pt' | sed "s/ *[0-9]*.//")
+selected=$(
+    printf "%s\n" "${sessions[@]}" | cat -n | \
+    fzf --reverse --header "Go to tmux session" \
+        --preview 'echo {} | sed "s/ *[0-9]*.//" | xargs tmux capture-pane -pt' | \
+    sed "s/ *[0-9]*.//"
+)
 
 [ -z "$selected" ] && exit 1
 
-if tmux has-session -t "$selected" 2>/dev/null; then
+if ! tmux has-session -t "$selected" 2>/dev/null; then
 
-    go_to_session "$selected"
+    # Session does not exist
+    # Need to create it
 
-elif [ -v "new_cmd_arr[$selected]" ]; then
+    if [[ " ${function_array[*]} " == *" $selected "* ]]; then
 
-    eval "${new_cmd_arr[$selected]}"
+        # Run function to create the session (in detached mode)
+        "$selected"
 
-else
+    else
 
-    # Create a detached session
-    tmux new-session -d -t "$selected"
+        # Create a detached session
+        tmux new-session -d -t "$selected"
+    fi
 
-    go_to_session "$selected"
 fi
+
+go_to_session "$selected"

@@ -24,8 +24,6 @@ elif command -v ip &> /dev/null; then
 
 fi
 
-if [ -z "$vpn_ip" ]; then
-    exit 0
-fi
+[ -z "$vpn_ip" ] && exit 0
 
 echo -n "vpn:$vpn_ip"
