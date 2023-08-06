@@ -13,6 +13,10 @@ source "$DIR/lib/pactl_helper.sh"
 
 SINK=$(get_sink)
 
+
+# Do nothing if sink is not set e.g., when no sound is playing
+[ -z "$SINK" ] && exit 0
+
 # https://wiki.archlinux.org/title/PulseAudio#Keyboard_volume_control
 pactl set-sink-mute "$SINK" false
 pactl set-sink-volume "$SINK" "$1"
