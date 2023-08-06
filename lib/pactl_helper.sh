@@ -31,10 +31,8 @@ is_muted() {
 
 notify_volume() {
     # https://wiki.archlinux.org/title/Dunst#Using_dunstify_as_volume/brightness_level_indicator
-    dunstify -u low -h string:x-dunst-stack-tag:volumeChange "$1"
-
     dunstify -u low -t 2000\
-        -i audio-volume-high \
+        -i multimedia-volume-control-symbolic \
         -h string:x-dunst-stack-tag:volumeChange \
         -h int:value:"$1" "Volume: $1"
 }
