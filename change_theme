@@ -106,6 +106,7 @@ change_theme_wallpaper() {
     [ ! -e "$wallpaper" ] && return 1
 
     feh --bg-scale "$wallpaper"
+    betterlockscreen -u "$wallpaper"
 }
 
 change_theme_xmobar() {
