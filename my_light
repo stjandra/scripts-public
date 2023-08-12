@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Increase or decrease the screen brightness.
+# To increase by 5%: my_light -A 5
+# To decrease by 5%: my_light -U 5
+
+light "$@"
+
+brightness=$(printf "%.0f" $(light))
+
+# https://wiki.archlinux.org/title/Dunst#Using_dunstify_as_volume/brightness_level_indicator
+dunstify -u low -t 2000\
+    -i brightness-display-symbolic \
+    -h string:x-dunst-stack-tag:brightnessChange \
+    -h int:value:"$brightness" "Brightness: $brightness"

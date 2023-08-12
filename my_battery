@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Prints the current battery status and capacity.
+
+dir="/sys/class/power_supply/BAT0"
+
+[ ! -f $dir/capacity ] && echo "Battery not found" && exit 0
+
+capacity=$(printf "%2s" $(cat "$dir/capacity"))
+
+status=$(cat "$dir/status")
+
+case "$status" in
+    "Discharging")
+        icon="󰁾"
+        ;;
+    "Not charging")
+        icon="󰂂"
+        ;;
+    "Charging")
+        icon="󰂄"
+        ;;
+    *)
+        icon="$status"
+        ;;
+esac
+
+echo "$icon$capacity"

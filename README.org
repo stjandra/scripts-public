@@ -63,6 +63,18 @@ A script that is executed once during macOS login.
 - Starts Emacs daemon.
 - Add keys to the ssh agent with password from the keychain.
 
+* my_battery
+
+Prints the current battery status and capacity.
+
+* my_date
+
+Prints the current datetime in yyyy-mm-dd HH:MM format.
+
+* my_light
+
+Change screen brightness with [[https://github.com/haikarainen/light][light]].
+
 * pactl_toggle
 
 Toggle sound (mute/unmute) with [[https://linux.die.net/man/1/pactl][pactl]].
