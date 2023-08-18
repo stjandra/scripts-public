@@ -6,7 +6,7 @@ dir="/sys/class/power_supply/BAT0"
 
 [ ! -f $dir/capacity ] && echo "Battery not found" && exit 0
 
-capacity=$(printf "%2s" $(cat "$dir/capacity"))
+capacity=$(printf "%2s" "$(cat "$dir/capacity")")
 
 status=$(cat "$dir/status")
 
@@ -25,4 +25,4 @@ case "$status" in
         ;;
 esac
 
-echo "$icon$capacity"
+echo "$icon:$capacity%"
