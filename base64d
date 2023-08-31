@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Decode the given base64 and add a new line at the end
+# e.g., base64d 'Ymxh'
+
+echo "$(echo -n "$1" | base64 -d)"
