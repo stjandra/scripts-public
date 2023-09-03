@@ -51,7 +51,7 @@ Whether we are in a macOS system.
 
 * lf_ueberzug
 
-Open the [[https://github.com/gokcehan/lf][lf]] file manager with [[https://github.com/seebye/ueberzug][Überzug]] for image preview.
+Open the [[https://github.com/gokcehan/lf][lf]] file manager with [[https://github.com/jstkdng/ueberzugpp][Überzug++]] for image preview.
 
 * mac_keystroke
 
