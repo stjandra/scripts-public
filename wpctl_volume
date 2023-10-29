@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Increase or decrease volume.
+# $1 - The volume,  e.g., 5%- or 5%+
+
+set -euo pipefail
+
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Source helper script.
+# shellcheck disable=SC1090
+source "$DIR/lib/wpctl_helper.sh"
+
+wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ "$1"
+
+vol=$(get_volume_percentage)
+
+notify_volume "$vol"
+
+is_muted && wpctl_toggle
