@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Convert UUID in hex like 0x00556b6e99ba57b9f70aaa4b02bbbccd from a file
+# to proper UUID like 00556b6e-99ba-57b9-f70a-aa4b02bbbccd
+# 1st arg: the UUID in hex to convert
+# If 1st arg is not given, read from stdin
+
+convert() {
+
+    # TODO automatically detect if there is 0x at the start
+
+    # Remove the '0x' prefix
+    uuid="${line:2}"
+
+    #uuid="$line"
+
+    # Insert hyphens at the appropriate positions
+    formatted_uuid="${uuid:0:8}-${uuid:8:4}-${uuid:12:4}-${uuid:16:4}-${uuid:20:12}"
+
+    echo "$formatted_uuid"
+}
+
+if [ $# -eq 0 ]; then
+    # No arguments, read from stdin
+    while IFS= read -r line; do
+        convert "$line"
+    done
+else
+    # Argument provided, read from the argument
+    input="$1"
+    while IFS= read -r line; do
+        convert "$line"
+    done <<< "$input"
+fi
+
