@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+# Notify when the battery gets low.
+#
+# Intended to run in the background, for example:
+#   my_battery_notify &
+
+dir="/sys/class/power_supply/BAT0"
+interval="${BATTERY_NOTIFY_INTERVAL:-60}"
+low_threshold="${BATTERY_NOTIFY_LOW_THRESHOLD:-35}"
+critical_threshold="${BATTERY_NOTIFY_CRITICAL_THRESHOLD:-20}"
+state_file="${XDG_RUNTIME_DIR:-/tmp}/my_battery_notify.state"
+lock_file="${XDG_RUNTIME_DIR:-/tmp}/my_battery_notify.lock"
+
+# Exit if another copy of this script is already running.
+if command -v flock >/dev/null 2>&1; then
+    exec 9>"$lock_file"
+    flock -n 9 || exit 0
+fi
+
+read_battery() {
+    [ ! -f "$dir/capacity" ] && return 1
+
+    capacity=$(cat "$dir/capacity")
+    status=$(cat "$dir/status")
+}
+
+notify_battery() {
+    local urgency="$1"
+    local timeout="$2"
+    local icon="$3"
+    local message="$4"
+
+    dunstify -u "$urgency" -t "$timeout" \
+        -i "$icon" \
+        -h string:x-dunst-stack-tag:batteryLow \
+        -h int:value:"$capacity" \
+        "$message"
+}
+
+clear_state() {
+    rm -f "$state_file"
+}
+
+while true
+do
+    if ! read_battery; then
+        clear_state
+        sleep "$interval"
+        continue
+    fi
+
+    if [ "$status" != "Discharging" ]; then
+        clear_state
+        sleep "$interval"
+        continue
+    fi
+
+    level=""
+
+    if [ "$capacity" -le "$critical_threshold" ]; then
+        level="critical"
+    elif [ "$capacity" -le "$low_threshold" ]; then
+        level="low"
+    fi
+
+    if [ -z "$level" ]; then
+        clear_state
+        sleep "$interval"
+        continue
+    fi
+
+    # Only notify again when the alert state changes, for example
+    # from no alert -> low or low -> critical.
+    last_level=""
+    if [ -f "$state_file" ]; then
+        last_level=$(cat "$state_file")
+    fi
+
+    if [ "$level" != "$last_level" ]; then
+        if [ "$level" = "critical" ]; then
+            notify_battery critical 0 battery-caution \
+                "Battery critical: ${capacity}%"
+        else
+            notify_battery normal 10000 battery-low \
+                "Battery low: ${capacity}%"
+        fi
+
+        printf '%s\n' "$level" > "$state_file"
+    fi
+
+    sleep "$interval"
+done

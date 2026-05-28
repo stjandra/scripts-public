@@ -67,6 +67,10 @@ A script that is executed once during macOS login.
 
 Prints the current battery status and capacity.
 
+* my_battery_notify
+
+Run in the background and send a notification when the battery is low.
+
 * my_date
 
 Prints the current datetime in yyyy-mm-dd HH:MM format.
